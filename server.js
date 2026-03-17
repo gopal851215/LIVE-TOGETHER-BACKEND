@@ -11,8 +11,8 @@ import bookingRoutes from "./api/booking.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config({ quiet: true });
-connectDB();
 
+// Initialize Express app
 const app = express();
 
 /* ---------- MIDDLEWARE ---------- */
@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 
 /* ---------- SERVE UPLOADED IMAGES ---------- */
 
-app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+app.use("/uploads", express.static(path.join(process.cwd(), "backend/uploads")));
 
 /* ---------- ROUTES ---------- */
 
@@ -38,7 +38,7 @@ app.use("/api/bookings", bookingRoutes);
 /* ---------- TEST ROUTE ---------- */
 
 app.get("/", (req, res) => {
-  res.send("Student Housing & Intern Room Booking API");
+  res.json({ message: "Student Housing & Intern Room Booking API 🚀" });
 });
 
 /* ---------- ERROR HANDLER ---------- */
@@ -46,10 +46,21 @@ app.get("/", (req, res) => {
 app.use(notFound);
 app.use(errorHandler);
 
-/* ---------- SERVER ---------- */
+/** ---------- VERCEL SERVERLESS HANDLER ---------- **/
+export default async function handler(req, res) {
+  try {
+    // Lazy database connection
+    await connectDB();
+    
+    // Handle the request with Express
+    app(req, res);
+    
+  } catch (error) {
+    console.error("Handler error:", error);
+    res.status(500).json({ 
+      message: "Internal Server Error",
+      error: process.env.NODE_ENV === "production" ? undefined : error.message 
+    });
+  }
+}
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
