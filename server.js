@@ -4,9 +4,9 @@ import path from "path";
 import cors from "cors";
 
 import connectDB from "./config/db.js";
-import authRoutes from "./routes/authRoutes.js";
-import propertyRoutes from "./routes/propertyRoutes.js";
-import bookingRoutes from "./routes/bookingRoutes.js";
+import authRoutes from "./api/auth.js";
+import propertyRoutes from "./api/properties.js";
+import bookingRoutes from "./api/booking.js";
 
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
