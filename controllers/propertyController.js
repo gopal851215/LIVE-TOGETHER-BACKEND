@@ -92,7 +92,7 @@ export const createProperty = asyncHandler(async (req, res) => {
 // @route   GET /api/properties
 // @access  Public
 export const getProperties = asyncHandler(async (req, res) => {
-  const { type, city, minPrice, maxPrice, search } = req.query;
+  const { type, allowedFor, city, minPrice, maxPrice, search } = req.query;
 
   const query = { status: "available" };
 
@@ -104,6 +104,10 @@ export const getProperties = asyncHandler(async (req, res) => {
     } else {
       query.type = type;
     }
+  }
+
+  if (allowedFor) {
+    query.allowedFor = allowedFor;
   }
 
   if (city) query.city = new RegExp(city, "i");
