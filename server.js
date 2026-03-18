@@ -7,6 +7,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./api/auth.js";
 import propertyRoutes from "./api/properties.js";
 import bookingRoutes from "./api/booking.js";
+import testEmailRoutes from "./routes/testEmail.js";
 
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
@@ -38,6 +39,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/auth", authRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/test", testEmailRoutes);
 
 /* ---------- TEST ROUTE ---------- */
 
