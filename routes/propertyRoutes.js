@@ -38,12 +38,12 @@ router.put(
   "/:id",
   protect,
   hostOnly,
-  uploadMiddleware.fields([
-    { name: "houseImage", maxCount: 1 },
-    { name: "indoorImages", maxCount: 6 },
-    { name: "outdoorImages", maxCount: 6 },
-    { name: "images", maxCount: 6 },
-  ]),
+uploadMiddleware.fields([
+  { name: "houseImage", maxCount: 1 },
+  { name: "indoorImages", maxCount: 6 },
+  { name: "outdoorImages", maxCount: 6 },
+  { name: "images", maxCount: 6 },
+]),
   updateProperty
 );
 

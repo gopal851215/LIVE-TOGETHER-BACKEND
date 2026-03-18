@@ -1,17 +1,29 @@
 import multer from "multer";
-import path from "path";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary.js";
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    const baseName = path.basename(file.originalname, ext);
-    cb(null, `${baseName}-${Date.now()}${ext}`);
+// Cloudinary storage config
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: async (req, file) => {
+    let folder = "livetogether";
+    let format = "jpg";
+
+    // Detect format automatically
+    if (file.mimetype === "image/png") format = "png";
+    if (file.mimetype === "image/webp") format = "webp";
+    if (file.mimetype === "application/pdf") format = "pdf";
+
+    return {
+      folder,
+      resource_type: file.mimetype === "application/pdf" ? "raw" : "image",
+      format,
+      public_id: `${Date.now()}-${file.originalname.split(".")[0]}`,
+    };
   },
 });
 
+// File filter (same logic)
 const fileFilter = (req, file, cb) => {
   const allowedTypes = [
     "image/jpeg",
