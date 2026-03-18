@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 
 /* ---------- SERVE UPLOADED IMAGES ---------- */
 
-app.use("/uploads", express.static(path.join(process.cwd(), "backend/uploads")));
+app.use("/uploads", express.static("uploads"));
 
 /* ---------- ROUTES ---------- */
 
