@@ -46,6 +46,18 @@ app.get("/", (req, res) => {
 app.use(notFound);
 app.use(errorHandler);
 
+// ---------- LOCAL DEVELOPMENT SERVER ----------
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Backend server running on http://localhost:${PORT}`);
+    console.log('💾 DB will connect lazily on first request');
+  });
+  
+  // Connect DB asynchronously without blocking server
+  connectDB().catch(err => console.error('Initial DB connection failed:', err));
+}
+
 /** ---------- VERCEL SERVERLESS HANDLER ---------- **/
 export default async function handler(req, res) {
   try {
